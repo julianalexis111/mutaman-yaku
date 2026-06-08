@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mutaman Yaku</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #e8efe8; --bg2: #dde8e5; --stone: #2c4a52; --stone-deep: #1a3038;
+    --sea: #3a7a8a; --sea-light: #5fa8b8; --sea-pale: #a8cdd4;
+    --terracota: #b05c38; --sage: #6a8c72; --sand: #c8b07a;
+    --text: #1e3840; --text-dim: #5a7a82;
+    --border: rgba(42,90,106,0.15); --border-mid: rgba(42,90,106,0.25);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Jost', sans-serif; font-weight: 300; font-size: 16px; line-height: 1.7; overflow-x: hidden; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(232,239,232,0.97), transparent); backdrop-filter: blur(4px); }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 300; letter-spacing: 0.2em; color: var(--stone); text-transform: uppercase; text-decoration: none; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--sea); }
+  .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 6rem 3rem; }
+  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 90% 70% at 20% 80%, rgba(58,122,138,0.22) 0%, transparent 65%), radial-gradient(ellipse 60% 50% at 80% 20%, rgba(95,168,184,0.14) 0%, transparent 60%), radial-gradient(ellipse 70% 40% at 55% 55%, rgba(106,140,114,0.1) 0%, transparent 55%), linear-gradient(160deg, #dce9e6 0%, #e8efe8 40%, #d8e6e2 100%); }
+  .hero-bg::before { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(175deg, transparent, transparent 48px, rgba(58,122,138,0.04) 48px, rgba(58,122,138,0.04) 49px); }
+  .hero-content { position: relative; z-index: 2; max-width: 780px; text-align: center; }
+  .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 2rem; opacity: 0; animation: fadeUp 1s 0.2s forwards; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(3.5rem, 9vw, 7rem); font-weight: 300; line-height: 1; letter-spacing: -0.01em; color: var(--stone-deep); margin-bottom: 0.4rem; opacity: 0; animation: fadeUp 1.2s 0.4s forwards; }
+  .hero-title em { font-style: italic; color: var(--sea); }
+  .hero-subtitle-line { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 300; font-style: italic; color: var(--terracota); letter-spacing: 0.04em; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 1.2s 0.6s forwards; }
+  .hero-desc { font-size: 0.95rem; color: var(--text-dim); max-width: 480px; margin: 0 auto 3rem; line-height: 1.9; opacity: 0; animation: fadeUp 1s 0.8s forwards; }
+  .hero-cta { display: inline-flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; opacity: 0; animation: fadeUp 1s 1s forwards; }
+  .btn-primary { padding: 0.8rem 2.2rem; border: 1px solid var(--sea); color: var(--sea); text-decoration: none; font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; transition: all 0.3s; background: transparent; }
+  .btn-primary:hover { background: rgba(58,122,138,0.1); color: var(--stone-deep); border-color: var(--stone); }
+  .btn-ghost { padding: 0.8rem 2.2rem; border: 1px solid var(--border-mid); color: var(--text-dim); text-decoration: none; font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; transition: all 0.3s; }
+  .btn-ghost:hover { border-color: var(--sea); color: var(--sea); }
+  .divider { width: 1px; height: 80px; background: linear-gradient(to bottom, transparent, var(--border-mid), transparent); margin: 0 auto; }
+  .section { padding: 7rem 3rem; max-width: 1100px; margin: 0 auto; }
+  .section-label { font-size: 0.68rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 3.5rem; display: flex; align-items: center; gap: 1rem; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border-mid); max-width: 80px; }
+  .about-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 6rem; align-items: center; }
+  .about-portrait { aspect-ratio: 3/4; background: linear-gradient(160deg, rgba(58,122,138,0.15), rgba(106,140,114,0.12)); border: 1px solid var(--border-mid); display: flex; align-items: flex-end; padding: 1.5rem; position: relative; overflow: hidden; }
+  .about-portrait::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 35% 25%, rgba(95,168,184,0.18), transparent 55%), radial-gradient(ellipse at 70% 75%, rgba(106,140,114,0.12), transparent 45%); }
+  .portrait-placeholder { font-family: 'Cormorant Garamond', serif; font-size: 0.75rem; font-style: italic; color: var(--text-dim); position: relative; z-index: 1; }
+  .about-text h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 300; line-height: 1.2; color: var(--stone-deep); margin-bottom: 1.5rem; }
+  .about-text h2 em { font-style: italic; color: var(--sea); }
+  .about-text p { color: var(--text-dim); font-size: 0.93rem; line-height: 1.9; margin-bottom: 1.2rem; }
+  .about-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem; }
+  .tag { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); border: 1px solid var(--border-mid); padding: 0.35rem 0.9rem; background: rgba(58,122,138,0.04); }
+  .works-section { padding: 5rem 3rem 7rem; max-width: 1100px; margin: 0 auto; }
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); border: 1px solid var(--border-mid); }
+  .card { padding: 2.5rem; border-right: 1px solid var(--border-mid); position: relative; overflow: hidden; cursor: pointer; transition: background 0.4s; text-decoration: none; display: block; color: inherit; background: rgba(255,255,255,0.3); }
+  .card:last-child { border-right: none; }
+  .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--sea); transform: scaleX(0); transform-origin: left; transition: transform 0.4s; }
+  .card:hover { background: rgba(58,122,138,0.06); }
+  .card:hover::before { transform: scaleX(1); }
+  .card-icon { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-style: italic; color: var(--sea-light); margin-bottom: 1.5rem; opacity: 0.7; }
+  .card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 400; color: var(--stone-deep); margin-bottom: 0.8rem; }
+  .card-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.8; }
+  .card-arrow { position: absolute; bottom: 1.8rem; right: 2rem; font-size: 1.2rem; color: var(--border-mid); transition: all 0.3s; }
+  .card:hover .card-arrow { color: var(--sea); transform: translate(3px, -3px); }
+  .quote-section { padding: 6rem 3rem; text-align: center; position: relative; background: linear-gradient(to bottom, transparent, rgba(58,122,138,0.06), transparent); }
+  .quote-section::before, .quote-section::after { content: ''; position: absolute; left: 50%; width: 1px; height: 60px; background: var(--border-mid); transform: translateX(-50%); }
+  .quote-section::before { top: 0; }
+  .quote-section::after { bottom: 0; }
+  blockquote { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 300; font-style: italic; color: var(--stone); line-height: 1.5; max-width: 700px; margin: 0 auto 1.5rem; }
+  cite { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); font-style: normal; }
+  footer { border-top: 1px solid var(--border-mid); padding: 2.5rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(58,122,138,0.04); }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 300; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase; }
+  .footer-note { font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0.08em; }
+  .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+  .footer-links a { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); text-decoration: none; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--sea); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s, transform 0.8s; }
+  .reveal.visible { opacity: 1; transform: none; }
+  @media (max-width: 700px) {
+    nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; } .about-portrait { display: none; }
+    .section, .works-section { padding: 4rem 1.5rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; } .footer-links { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="#" class="nav-logo">Mutaman Yaku</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#works">Writing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Writing · Music · Silence</p>
+    <h1 class="hero-title"><em>Mutaman</em> Yaku</h1>
+    <p class="hero-subtitle-line">the water that transforms</p>
+    <p class="hero-desc">Dispatches from the interior. Notes from five years of wandering — through mountains, meditation halls, and the long silences between.</p>
+    <div class="hero-cta">
+      <a href="#works" class="btn-primary">Read</a>
+      <a href="#about" class="btn-ghost">About</a>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+<section class="section" id="about">
+  <p class="section-label reveal">Who</p>
+  <div class="about-grid">
+    <div class="about-portrait">
+      <p class="portrait-placeholder">photograph, soon</p>
+    </div>
+    <div class="about-text reveal">
+      <h2>Five years<br>outside <em>the map.</em></h2>
+      <p>I left a career and walked into the unknown. Since then: Vipassana retreats across a dozen countries, a yoga teacher training in Mysore, the Camino, a cabin in Córdoba, and a bag full of handwritten notebooks.</p>
+      <p>Mutaman Yaku — "the water that transforms" in Quechua — is where those notebooks become essays. It's a record of what happens when you take silence seriously.</p>
+      <div class="about-tags">
+        <span class="tag">Vipassana</span>
+        <span class="tag">Writing</span>
+        <span class="tag">DJ / Music</span>
+        <span class="tag">Yoga</span>
+        <span class="tag">Nomadic</span>
+        <span class="tag">Argentina</span>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="works-section" id="works">
+  <p class="section-label reveal">What's here</p>
+  <div class="cards-grid">
+    <a href="#" class="card">
+      <p class="card-icon">I</p>
+      <h3 class="card-title">Writing</h3>
+      <p class="card-desc">Essays on practice, impermanence, and what remains. Published on Substack.</p>
+      <span class="card-arrow">↗</span>
+    </a>
+    <a href="#" class="card">
+      <p class="card-icon">II</p>
+      <h3 class="card-title">Music</h3>
+      <p class="card-desc">DJ sets and curated mixes — atmospheric, deep, unhurried. Hernán Cattaneo territory.</p>
+      <span class="card-arrow">↗</span>
+    </a>
+    <a href="#" class="card">
+      <p class="card-icon">III</p>
+      <h3 class="card-title">Notebooks</h3>
+      <p class="card-desc">Fragments from years of handwritten cuadernos. Raw material, slowly becoming something.</p>
+      <span class="card-arrow">↗</span>
+    </a>
+  </div>
+</section>
+<div class="quote-section">
+  <blockquote>"Everything that arises passes away. This is the nature of things."</blockquote>
+  <cite>Anicca</cite>
+</div>
+<footer>
+  <p class="footer-logo">Mutaman Yaku</p>
+  <p class="footer-note">© 2025 · All rights reserved</p>
+  <ul class="footer-links">
+    <li><a href="#">Substack</a></li>
+    <li><a href="#">Instagram</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</footer>
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
